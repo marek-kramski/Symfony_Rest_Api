@@ -18,19 +18,13 @@ class RestController extends Controller
     public function getAllMessages()
     {
         $response = new Response();
+        $messages = $this->getDoctrine()
+                         ->getRepository('ApiBundle:Message')
+                         ->getAllMessages();
 
-        $messages = $this->getDoctrine()->getRepository('ApiBundle:Message')->findAll();
-        $messageValues = array();
-        foreach ($messages as $message) {
-            $messageValues[] = array(
-                'id' => $message->getId(),
-                'content' => $message->getContent(),
-                'added' => $message->getAdded(),
-            );
-        }
         $response->headers->set('Content-Type', 'application/json');
 
-        return $response->setContent(json_encode(array('message' => $messageValues)));
+        return $response->setContent($messages);
     }
 
     /**
@@ -39,7 +33,9 @@ class RestController extends Controller
      */
     public function getMessageById(Request $request, $id)
     {
-        $message = $this->getDoctrine()->getRepository('ApiBundle:Message')->getMessageById($request, $id);
+        $message = $this->getDoctrine()
+                        ->getRepository('ApiBundle:Message')
+                        ->getMessageById($request, $id);
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         return $response->setContent($message);
@@ -52,31 +48,12 @@ class RestController extends Controller
      */
     public function getFormByMessageId(Request $request, $id)
     {
+        $form = $this->getDoctrine()
+                        ->getRepository('ApiBundle:Message')
+                        ->getFormByMessageId($request, $id);
         $response = new Response();
-
-        $message = $this->getDoctrine()->getRepository('ApiBundle:Message')->getById($id);
-        $messageObject = $this->getDoctrine()->getRepository('ApiBundle:Message')->find($id);
-        $email = $messageObject->getEmail();
-        $contactInfo = $this->getDoctrine()->getRepository('ApiBundle:ContactInfo')->getInfoByEmail($email);
-
-        $uri = $request->getUri();
-        $dirName = dirname($uri);
-        $currentResourceNext = intval(basename($uri));
-        $currentResourcePrev = intval(basename($uri));
-
-        $hal_links = array(
-            'self' => array('href' => "$uri"),
-        );
-
-        if ($this->getDoctrine()->getRepository('ApiBundle:Message')->getById($currentResourceNext + 1)) {
-            $hal_links['next'] = array('href' => "$dirName/" . ($currentResourceNext + 1));
-        }
-        if (($currentResourcePrev - 1) !== 0) {
-            $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
-        }
-
         $response->headers->set('Content-Type', 'application/json');
-        return $response->setContent(json_encode(array('_links' => $hal_links, 'Message' => $message, 'Contact_info' => $contactInfo), JSON_UNESCAPED_SLASHES));
+        return $response->setContent($form);
     }
 
     /**

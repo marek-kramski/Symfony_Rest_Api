@@ -15,7 +15,16 @@ class MessageRepository extends EntityRepository
 {
     public function getAllMessages()
     {
-        
+        $messages = $this->findAll();
+        $messageValues = array();
+        foreach ($messages as $message) {
+            $messageValues[] = array(
+                'id' => $message->getId(),
+                'content' => $message->getContent(),
+                'added' => $message->getAdded(),
+            );
+        }
+        return json_encode(array('message' => $messageValues));
     }
 
     public function getMessageById($request, $id)
@@ -40,13 +49,35 @@ class MessageRepository extends EntityRepository
         $messageValues['id'] = $message->getId();
         $messageValues['content'] = $message->getContent();
         $messageValues['added'] = $message->getAdded();
-        
-        
-        return json_encode(array('_links' => $hal_links, 'message' => $messageValues,), JSON_UNESCAPED_SLASHES);
+
+
+        return json_encode(array('_links' => $hal_links,
+            'message' => $messageValues,), JSON_UNESCAPED_SLASHES);
     }
 
     public function getFormByMessageId($request, $id)
     {
+        $message = $this->getById($id);
+        $messageObject = $this->find($id);
+        $email = $messageObject->getEmail();
+        $contactInfo = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->getInfoByEmail($email);
+
+        $uri = $request->getUri();
+        $dirName = dirname($uri);
+        $currentResourceNext = intval(basename($uri));
+        $currentResourcePrev = intval(basename($uri));
+
+        $hal_links = array(
+            'self' => array('href' => "$uri"),
+        );
+
+        if ($this->getById($currentResourceNext + 1)) {
+            $hal_links['next'] = array('href' => "$dirName/" . ($currentResourceNext + 1));
+        }
+        if (($currentResourcePrev - 1) !== 0) {
+            $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
+        }
+        return json_encode(array('_links' => $hal_links, 'Message' => $message, 'Contact_info' => $contactInfo), JSON_UNESCAPED_SLASHES);
 
     }
 
