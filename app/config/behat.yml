@@ -14,7 +14,7 @@ default:
         Behat\Symfony2Extension:
             kernel:
               env: "dev"
-              debug: "true"
+              debug: "false"
         Behat\MinkExtension:
             sessions:
                 default:
