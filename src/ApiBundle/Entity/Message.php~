@@ -1,0 +1,45 @@
+<?php
+
+namespace ApiBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Message
+ *
+ * @ORM\Entity(repositoryClass="ApiBundle\Repository\MessageRepository")
+ * @ORM\Table(name="message")
+ */
+class Message
+{
+    /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="text", length=5000)
+     */
+    private $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="contactinfo", inversedBy="messages", cascade={"persist"})
+     * @ORM\JoinColumn(name="email", referencedColumnName="email")
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $added;
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function doStuffOnPrePersist()
+    {
+        $this->added = date_create(date('Y-m-d H:i:s'));
+    }
+}

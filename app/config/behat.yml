@@ -1,0 +1,23 @@
+default:
+    suites:
+        default:
+            autoload:
+                '': %paths.base%/src
+            type: symfony_bundle
+            bundle: ApiBundle
+#            mink_session: selenium2
+            contexts:
+#                - ApiBundle\Features\Context\FeatureContext
+                - behatch:json
+                - behatch:rest
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+              env: "dev"
+              debug: "true"
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+        Behat\WebApiExtension: ~
+        Sanpi\Behatch\Extension: ~

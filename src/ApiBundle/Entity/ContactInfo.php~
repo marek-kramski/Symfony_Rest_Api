@@ -1,0 +1,44 @@
+<?php
+
+namespace ApiBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ContactInfo
+ *
+ * @ORM\Entity(repositoryClass="ApiBundle\Repository\ContactInfoRepository")
+ * @ORM\Table(name="contact_info")
+ * @ORM\HasLifecycleCallbacks
+ */
+class ContactInfo
+{
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $phone;
+
+    /**
+     * @ORM\OneToMany(targetEntity="message", mappedBy="email", cascade={"persist"})
+     */
+    protected $messages;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->messages = new ArrayCollection();
+    }
+}
