@@ -33,10 +33,10 @@ class RestController extends Controller
      */
     public function getMessageById(Request $request, $id)
     {
+        $response = new JsonResponse();
         $message = $this->getDoctrine()
                         ->getRepository('ApiBundle:Message')
                         ->getMessageById($request, $id);
-        $response = new JsonResponse();
         return $response->setContent($message);
 
     }
@@ -47,10 +47,10 @@ class RestController extends Controller
      */
     public function getFormByMessageId(Request $request, $id)
     {
+        $response = new JsonResponse();
         $form = $this->getDoctrine()
                         ->getRepository('ApiBundle:Message')
                         ->getFormByMessageId($request, $id);
-        $response = new JsonResponse();
         return $response->setContent($form);
     }
 
