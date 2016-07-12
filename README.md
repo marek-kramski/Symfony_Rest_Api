@@ -1,4 +1,4 @@
 rest_api_play
 =============
 
-A Symfony project created on July 6, 2016, 5:56 pm.
+Simple rest api with basic HAL implementation.
