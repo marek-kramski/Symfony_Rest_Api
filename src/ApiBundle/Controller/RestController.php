@@ -34,36 +34,15 @@ class RestController extends Controller
     }
 
     /**
-     * @Route("/api/messages/{id}", name="delete_message")
+     * @Route("/api/messages/{id}", name="get_message_by_id")
      * @Method("GET")
      */
     public function getMessageById(Request $request, $id)
     {
-        $message = $this->getDoctrine()->getRepository('ApiBundle:Message')->find($id);
-
+        $message = $this->getDoctrine()->getRepository('ApiBundle:Message')->getMessageById($request, $id);
         $response = new Response();
-
-        $uri = $request->getUri();
-        $dirName = dirname($uri);
-        $currentResourceNext = intval(basename($uri));
-        $currentResourcePrev = intval(basename($uri));
-
-        $hal_links = array(
-            'self' => array('href' => "$uri"),
-        );
-
-        if ($this->getDoctrine()->getRepository('ApiBundle:Message')->getById($currentResourceNext + 1)) {
-            $hal_links['next'] = array('href' => "$dirName/" . ($currentResourceNext + 1));
-        }
-        if (($currentResourcePrev - 1) !== 0) {
-            $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
-        }
-
-        $messageValues['id'] = $message->getId();
-        $messageValues['content'] = $message->getContent();
-        $messageValues['added'] = $message->getAdded();
         $response->headers->set('Content-Type', 'application/json');
-        return $response->setContent(json_encode(array('_links' => $hal_links, 'message' => $messageValues,), JSON_UNESCAPED_SLASHES));
+        return $response->setContent($message);
 
     }
 
@@ -143,7 +122,7 @@ class RestController extends Controller
      */
     public function deleteMessage($id)
     {
-        $this->deleteForm($id);
+        return $this->deleteForm($id);
     }
 
 

@@ -13,7 +13,44 @@ use Doctrine\ORM\Query;
  */
 class MessageRepository extends EntityRepository
 {
-    public function getById($id)
+    public function getAllMessages()
+    {
+        
+    }
+
+    public function getMessageById($request, $id)
+    {
+        $message = $this->find($id);
+        $uri = $request->getUri();
+        $dirName = dirname($uri);
+        $currentResourceNext = intval(basename($uri));
+        $currentResourcePrev = intval(basename($uri));
+
+        $hal_links = array(
+            'self' => array('href' => "$uri"),
+        );
+
+        if ($this->getById($currentResourceNext + 1)) {
+            $hal_links['next'] = array('href' => "$dirName/" . ($currentResourceNext + 1));
+        }
+        if (($currentResourcePrev - 1) !== 0) {
+            $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
+        }
+
+        $messageValues['id'] = $message->getId();
+        $messageValues['content'] = $message->getContent();
+        $messageValues['added'] = $message->getAdded();
+        
+        
+        return json_encode(array('_links' => $hal_links, 'message' => $messageValues,), JSON_UNESCAPED_SLASHES);
+    }
+
+    public function getFormByMessageId($request, $id)
+    {
+
+    }
+
+    private function getById($id)
     {
         $em = $this->getEntityManager();
 
