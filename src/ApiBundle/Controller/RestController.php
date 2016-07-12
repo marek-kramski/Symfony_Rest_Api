@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RestController extends Controller
 {
@@ -17,12 +18,11 @@ class RestController extends Controller
      */
     public function getAllMessages()
     {
-        $response = new Response();
+        $response = new JsonResponse();
         $messages = $this->getDoctrine()
                          ->getRepository('ApiBundle:Message')
                          ->getAllMessages();
 
-        $response->headers->set('Content-Type', 'application/json');
 
         return $response->setContent($messages);
     }
@@ -36,8 +36,7 @@ class RestController extends Controller
         $message = $this->getDoctrine()
                         ->getRepository('ApiBundle:Message')
                         ->getMessageById($request, $id);
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/json');
+        $response = new JsonResponse();
         return $response->setContent($message);
 
     }
@@ -51,8 +50,7 @@ class RestController extends Controller
         $form = $this->getDoctrine()
                         ->getRepository('ApiBundle:Message')
                         ->getFormByMessageId($request, $id);
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/json');
+        $response = new JsonResponse();
         return $response->setContent($form);
     }
 
