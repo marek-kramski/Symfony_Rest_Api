@@ -23,7 +23,6 @@ class RestController extends Controller
             ->getRepository('ApiBundle:Message')
             ->getAllMessages();
 
-
         return $response->setContent($messages);
     }
 
@@ -34,10 +33,15 @@ class RestController extends Controller
     public function getMessageById(Request $request, $id)
     {
         $response = new JsonResponse();
+        $uri = $request->getUri();
         $message = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
-            ->getMessageById($request, $id);
-        return $response->setContent($message);
+            ->getMessageById($uri, $id);
+        $hal_links = $this->getHalValues($uri, $id);
+
+        $messageWithHal = json_encode(array('_links' => $hal_links, 'message' => $message));
+
+        return $response->setContent($messageWithHal);
 
     }
 
@@ -48,10 +52,14 @@ class RestController extends Controller
     public function getFormByMessageId(Request $request, $id)
     {
         $response = new JsonResponse();
+        $uri = $request->getUri();
         $form = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
-            ->getFormByMessageId($request, $id);
-        return $response->setContent($form);
+            ->getFormByMessageId($id);
+
+        $hal_links = $this->getHalValues($uri, $id);
+        $formWithHal = json_encode(array('_links' => $hal_links, 'form' => $form));
+        return $response->setContent($formWithHal);
     }
 
     /**
@@ -144,6 +152,24 @@ class RestController extends Controller
 
         $response->setStatusCode(200);
         return $response;
+    }
+
+    private function getHalValues($uri, $id)
+    {
+        $dirName = dirname($uri);
+
+        $hal_links = array(
+            'self' => array('href' => "$uri"),
+        );
+
+        if ($this->getDoctrine()
+                 ->getRepository('ApiBundle:Message')->getById($id + 1)) {
+            $hal_links['next'] = array('href' => "$dirName/" . ($id + 1));
+        }
+        if (($id - 1) !== 0) {
+            $hal_links['prev'] = array('href' => "$dirName/" . ($id - 1));
+        }
+        return $hal_links;
     }
 
 

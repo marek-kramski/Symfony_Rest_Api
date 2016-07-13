@@ -27,61 +27,31 @@ class MessageRepository extends EntityRepository
         return json_encode(array('message' => $messageValues));
     }
 
-    public function getMessageById($request, $id)
+    public function getMessageById($uri, $id)
     {
         $message = $this->find($id);
-        $uri = $request->getUri();
         $dirName = dirname($uri);
-        $currentResourceNext = intval(basename($uri));
-        $currentResourcePrev = intval(basename($uri));
-
-        $hal_links = array(
-            'self' => array('href' => "$uri"),
-        );
-
-        if ($this->getById($currentResourceNext + 1)) {
-            $hal_links['next'] = array('href' => "$dirName/" . ($currentResourceNext + 1));
-        }
-        if (($currentResourcePrev - 1) !== 0) {
-            $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
-        }
 
         $messageValues['id'] = $message->getId();
         $messageValues['content'] = $message->getContent();
         $messageValues['added'] = $message->getAdded();
 
 
-        return json_encode(array('_links' => $hal_links,
-            'message' => $messageValues,), JSON_UNESCAPED_SLASHES);
+        return array('message' => $messageValues,);
     }
 
-    public function getFormByMessageId($request, $id)
+    public function getFormByMessageId($id)
     {
         $message = $this->getById($id);
         $messageObject = $this->find($id);
         $email = $messageObject->getEmail();
         $contactInfo = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->getInfoByEmail($email);
 
-        $uri = $request->getUri();
-        $dirName = dirname($uri);
-        $currentResourceNext = intval(basename($uri));
-        $currentResourcePrev = intval(basename($uri));
-
-        $hal_links = array(
-            'self' => array('href' => "$uri"),
-        );
-
-        if ($this->getById($currentResourceNext + 1)) {
-            $hal_links['next'] = array('href' => "$dirName/" . ($currentResourceNext + 1));
-        }
-        if (($currentResourcePrev - 1) !== 0) {
-            $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
-        }
-        return json_encode(array('_links' => $hal_links, 'message' => $message, 'Contact_info' => $contactInfo), JSON_UNESCAPED_SLASHES);
+        return array('message' => $message, 'Contact_info' => $contactInfo);
 
     }
 
-    private function getById($id)
+    public function getById($id)
     {
         $em = $this->getEntityManager();
 
@@ -90,7 +60,7 @@ class MessageRepository extends EntityRepository
         FROM ApiBundle:Message m
         WHERE m.id = :id
         ')->setParameter('id', $id);
-        $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
+//        $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
 
         return $query->getResult(Query::HYDRATE_ARRAY);
     }
@@ -99,8 +69,7 @@ class MessageRepository extends EntityRepository
     {
         $exists = $this->getById($id);
         var_dump($exists);
-        return !isset($exists);
-
+        return null !== $this->find($id);
     }
 
 
