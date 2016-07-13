@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f5d15b21-6216-419b-8207-6c535b0fd698" name="Default" comment="Moved application logic to repository.">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/deployment.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/rest_api_play.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+    <list default="true" id="f5d15b21-6216-419b-8207-6c535b0fd698" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/behat.yml" afterPath="$PROJECT_DIR$/app/config/behat.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ApiBundle/Controller/RestController.php" afterPath="$PROJECT_DIR$/src/ApiBundle/Controller/RestController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ApiBundle/Features/message.feature" afterPath="$PROJECT_DIR$/src/ApiBundle/Features/message.feature" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ApiBundle/Repository/MessageRepository.php" afterPath="$PROJECT_DIR$/src/ApiBundle/Repository/MessageRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="dc1ed09a-ee1f-4950-b30e-409ffb22b3c3" name="New changelist" comment="" />
     <ignored path="rest_api_play.iws" />
@@ -102,8 +88,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="17">
+              <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -532,7 +518,7 @@
       <updated>1467821605159</updated>
       <workItem from="1467821606973" duration="77193000" />
       <workItem from="1468241227528" duration="48681000" />
-      <workItem from="1468326515737" duration="20370000" />
+      <workItem from="1468326515737" duration="20494000" />
     </task>
     <task id="LOCAL-00001" summary="Tidying up.">
       <created>1468313765362</created>
@@ -583,11 +569,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468346095503</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Tidying code.">
+      <created>1468370351467</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1468370351467</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="146244000" />
+    <option name="totallyTimeSpent" value="146368000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -637,7 +630,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Tidying up." />
     <MESSAGE value="Moved application logic to repository." />
-    <option name="LAST_COMMIT_MESSAGE" value="Moved application logic to repository." />
+    <MESSAGE value="Tidying code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tidying code." />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="false" />
   </component>
   <component name="XDebuggerManager">
@@ -1041,8 +1035,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="17">
+          <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
           <folding />
         </state>
       </provider>
