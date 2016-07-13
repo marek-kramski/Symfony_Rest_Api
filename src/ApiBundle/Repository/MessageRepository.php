@@ -77,7 +77,7 @@ class MessageRepository extends EntityRepository
         if (($currentResourcePrev - 1) !== 0) {
             $hal_links['prev'] = array('href' => "$dirName/" . ($currentResourcePrev - 1));
         }
-        return json_encode(array('_links' => $hal_links, 'Message' => $message, 'Contact_info' => $contactInfo), JSON_UNESCAPED_SLASHES);
+        return json_encode(array('_links' => $hal_links, 'message' => $message, 'Contact_info' => $contactInfo), JSON_UNESCAPED_SLASHES);
 
     }
 

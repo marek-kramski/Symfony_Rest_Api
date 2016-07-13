@@ -5,7 +5,6 @@ default:
                 '': %paths.base%/src
             type: symfony_bundle
             bundle: ApiBundle
-#            mink_session: selenium2
             contexts:
 #                - ApiBundle\Features\Context\FeatureContext
                 - behatch:json

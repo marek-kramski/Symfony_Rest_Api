@@ -20,8 +20,8 @@ class RestController extends Controller
     {
         $response = new JsonResponse();
         $messages = $this->getDoctrine()
-                         ->getRepository('ApiBundle:Message')
-                         ->getAllMessages();
+            ->getRepository('ApiBundle:Message')
+            ->getAllMessages();
 
 
         return $response->setContent($messages);
@@ -35,8 +35,8 @@ class RestController extends Controller
     {
         $response = new JsonResponse();
         $message = $this->getDoctrine()
-                        ->getRepository('ApiBundle:Message')
-                        ->getMessageById($request, $id);
+            ->getRepository('ApiBundle:Message')
+            ->getMessageById($request, $id);
         return $response->setContent($message);
 
     }
@@ -49,8 +49,8 @@ class RestController extends Controller
     {
         $response = new JsonResponse();
         $form = $this->getDoctrine()
-                        ->getRepository('ApiBundle:Message')
-                        ->getFormByMessageId($request, $id);
+            ->getRepository('ApiBundle:Message')
+            ->getFormByMessageId($request, $id);
         return $response->setContent($form);
     }
 
@@ -76,9 +76,7 @@ class RestController extends Controller
 
         $form->handleRequest($request);
 
-        $response = new Response();
-        $statusCode = $em->contains($message) ? 201 : 204;
-        $response->setStatusCode($statusCode);
+        $response = new JsonResponse();
 
         if ($form->isValid()) {
             $em->persist($message);
@@ -87,6 +85,9 @@ class RestController extends Controller
             $this->redirectToRoute('get_form_by_id', array('id' => $message->getId()));
             return $message;
         }
+        $statusCode = $em->contains($message) ? 201 : 204;
+        $response->setStatusCode($statusCode);
+
         return $response;
 
     }
@@ -111,9 +112,7 @@ class RestController extends Controller
 
         $form->handleRequest($request);
 
-        $response = new Response();
-        $statusCode = $em->contains($message) ? 201 : 204;
-        $response->setStatusCode($statusCode);
+        $response = new JsonResponse();
 
         if ($form->isValid()) {
             $em->persist($message);
@@ -122,8 +121,9 @@ class RestController extends Controller
             $this->redirectToRoute('get_form_by_id', array('id' => $message->getId()));
             return $message;
         }
+        $statusCode = $em->contains($message) ? 201 : 204;
+        $response->setStatusCode($statusCode);
 
-        $response->headers->set('Content-Type', 'application/json');
 
         return $response;
     }
@@ -133,12 +133,17 @@ class RestController extends Controller
         $em = $this->getDoctrine()->getManager();
         $message = $this->getDoctrine()->getRepository('ApiBundle:Message')->find($id);
 
+        $response = new JsonResponse();
         if (!$message) {
+            $response->setStatusCode(204);
             throw $this->createNotFoundException('No message found for id ' . $id);
         }
 
         $em->remove($message);
         $em->flush();
+
+        $response->setStatusCode(200);
+        return $response;
     }
 
 
