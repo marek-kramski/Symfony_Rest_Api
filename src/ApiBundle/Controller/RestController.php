@@ -72,7 +72,7 @@ class RestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm('ApiBundle\Form\MessageOnlyType', $message);
+        $form = $this->createForm('ApiBundle\Form\MessageType', $message);
 
         $form->handleRequest($request);
 

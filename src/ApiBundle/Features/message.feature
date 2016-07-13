@@ -15,7 +15,7 @@ Feature: Testing Rest
     Then the response should be in JSON
 
   Scenario: Checking for json in PUT route
-    When I send a "POST" request to "api/messages"
+    When I send a "PUT" request to "api/messages/1"
     Then the response should be in JSON
 
 
