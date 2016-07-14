@@ -23,7 +23,8 @@ class RestController extends Controller
             ->getRepository('ApiBundle:Message')
             ->getAllMessages();
 
-        return $response->setContent($messages);
+        $response->setContent(json_encode($messages));
+        return $response;
     }
 
     /**
@@ -36,12 +37,13 @@ class RestController extends Controller
         $uri = $request->getUri();
         $message = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
-            ->getMessageById($uri, $id);
+            ->getMessageById($id);
         $hal_links = $this->getHalValues($uri, $id);
 
-        $messageWithHal = json_encode(array('_links' => $hal_links, 'message' => $message));
+        $messageWithHal = array('_links' => $hal_links, 'message' => $message);
 
-        return $response->setContent($messageWithHal);
+        $response->setContent(json_encode($messageWithHal));
+        return $response;
 
     }
 
@@ -59,6 +61,7 @@ class RestController extends Controller
 
         $hal_links = $this->getHalValues($uri, $id);
         $formWithHal = json_encode(array('_links' => $hal_links, 'form' => $form));
+        
         return $response->setContent($formWithHal);
     }
 
@@ -154,7 +157,7 @@ class RestController extends Controller
         return $response;
     }
 
-    private function getHalValues($uri, $id)
+    public function getHalValues($uri, $id)
     {
         $dirName = dirname($uri);
 
@@ -162,8 +165,7 @@ class RestController extends Controller
             'self' => array('href' => "$uri"),
         );
 
-        if ($this->getDoctrine()
-                 ->getRepository('ApiBundle:Message')->getById($id + 1)) {
+        if (($id + 1)) {
             $hal_links['next'] = array('href' => "$dirName/" . ($id + 1));
         }
         if (($id - 1) !== 0) {

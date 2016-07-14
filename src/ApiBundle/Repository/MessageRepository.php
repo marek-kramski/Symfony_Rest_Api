@@ -24,13 +24,12 @@ class MessageRepository extends EntityRepository
                 'added' => $message->getAdded(),
             );
         }
-        return json_encode(array('message' => $messageValues));
+        return array('messages' => $messageValues);
     }
 
-    public function getMessageById($uri, $id)
+    public function getMessageById($id)
     {
         $message = $this->find($id);
-        $dirName = dirname($uri);
 
         $messageValues['id'] = $message->getId();
         $messageValues['content'] = $message->getContent();
@@ -71,6 +70,7 @@ class MessageRepository extends EntityRepository
         var_dump($exists);
         return null !== $this->find($id);
     }
+    
 
 
 }
