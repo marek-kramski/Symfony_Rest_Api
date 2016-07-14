@@ -1,6 +1,7 @@
 {
   "name": "marek/rest_api_play",
   "license": "proprietary",
+  "description": "Rest Api in Symfony",
   "type": "project",
   "autoload": {
     "psr-4": {
