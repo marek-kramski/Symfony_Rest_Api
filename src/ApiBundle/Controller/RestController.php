@@ -61,7 +61,7 @@ class RestController extends Controller
 
         $hal_links = $this->getHalValues($uri, $id);
         $formWithHal = json_encode(array('_links' => $hal_links, 'form' => $form));
-        
+
         return $response->setContent($formWithHal);
     }
 
@@ -165,7 +165,8 @@ class RestController extends Controller
             'self' => array('href' => "$uri"),
         );
 
-        if (($id + 1)) {
+        if ($this->getDoctrine()
+            ->getRepository('ApiBundle:Message')->exists($id + 1)) {
             $hal_links['next'] = array('href' => "$dirName/" . ($id + 1));
         }
         if (($id - 1) !== 0) {

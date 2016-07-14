@@ -66,8 +66,6 @@ class MessageRepository extends EntityRepository
 
     public function exists($id)
     {
-        $exists = $this->getById($id);
-        var_dump($exists);
         return null !== $this->find($id);
     }
     
