@@ -51,11 +51,11 @@ class RestController extends Controller
         $halLinks = $this->getHalValues($uri, $id);
 
 
-        $messageWithHal = array('_links' => $halLinks, 'message' => $serializer->serialize($message, 'json'));
+//        $messageWithHal = array('_links' => $halLinks, 'message' => $serializer->serialize($message, 'json'));
 
 //        $messageSerialized['_links'] = $halLinks;
 
-        $response->setContent($messageWithHal);
+        $response->setContent($serializer->serialize($message, 'json'));
         return $response;
 
     }
