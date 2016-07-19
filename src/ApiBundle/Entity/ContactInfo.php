@@ -37,7 +37,7 @@ class ContactInfo
     private $phone;
 
     /**
-     * @ORM\OneToMany(targetEntity="message", mappedBy="id", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="message", mappedBy="contactInfoId", cascade={"persist"})
      */
     protected $messages;
 

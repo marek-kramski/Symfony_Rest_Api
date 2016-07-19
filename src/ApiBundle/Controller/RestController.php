@@ -12,29 +12,37 @@ class RestController extends Controller
 
     public function getAllMessagesAction()
     {
+        $serializer = $this->get('jms_serializer');
         $response = new JsonResponse();
+
         $messages = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
             ->getAllMessages();
 
-        $response->setContent(json_encode($messages));
+        $messagesSerialized = $serializer->serialize($messages, 'json');
+
+        $response->setContent($messagesSerialized);
         return $response;
     }
 
     public function getAllFormsAction()
     {
+        $serializer = $this->get('jms_serializer');
+
         $response = new JsonResponse();
         $forms = $this->getDoctrine()
-            ->getRepository('ApiBundle:Message')
-            ->getAllForms();
+                      ->getRepository('ApiBundle:Message')
+                      ->getAllForms();
 
-        $response->setContent(json_encode($forms));
+        $response->setContent($serializer->serialize($forms, 'json'));
 
         return $response;
     }
 
     public function getMessageByIdAction(Request $request, $id)
     {
+        $serializer = $this->get('jms_serializer');
+
         $response = new JsonResponse();
         $uri = $request->getUri();
         $message = $this->getDoctrine()
@@ -42,9 +50,12 @@ class RestController extends Controller
             ->getMessageById($id);
         $halLinks = $this->getHalValues($uri, $id);
 
-        $messageWithHal = array('_links' => $halLinks, 'message' => $message);
 
-        $response->setContent(json_encode($messageWithHal));
+        $messageWithHal = array('_links' => $halLinks, 'message' => $serializer->serialize($message, 'json'));
+
+//        $messageSerialized['_links'] = $halLinks;
+
+        $response->setContent($messageWithHal);
         return $response;
 
     }

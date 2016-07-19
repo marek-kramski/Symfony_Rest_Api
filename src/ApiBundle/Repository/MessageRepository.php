@@ -12,65 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class MessageRepository extends EntityRepository
 {
+
+
     public function getAllMessages()
     {
-        $messages = $this->findAll();
-        $messageValues = array();
-        foreach ($messages as $message) {
-            $messageValues[] = array(
-                'id' => $message->getId(),
-                'content' => $message->getContent(),
-                'added' => $message->getAdded(),
-            );
-        }
-        return array('messages' => $messageValues);
+
+        return $this->findAll();
     }
 
     public function getAllForms()
     {
         $contactInfos = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->findAll();
 
-        $forms = array();
-
-        $messageValues = array();
-
-
         foreach ($contactInfos as $contactInfo) {
             $id = $contactInfo->getId();
-            $messages = $this->findBy(array('contactInfoId' => $id));
-
-            $contactInfoData = array(
-                'name' => $contactInfo->getName(),
-                'phone' => $contactInfo->getPhone(),
-                'email' => $contactInfo->getEmail(),
-            );
-
-            foreach ($messages as $message) {
-                $messageValues = array(
-                    'id' => $message->getId(),
-                    'content' => $message->getContent(),
-                    'added' => $message->getAdded(),
-                );
-            }
-
-            $forms[] = array('contact_info' => $contactInfoData, 'message' => $messageValues);
+            $contactInfo->{$id} = $this->findBy(array('contactInfoId' => $id));
         }
 
-        return array('forms' => $forms);
+        return $contactInfos;
     }
 
     public function getMessageById($id)
     {
-        $message = $this->find($id);
-
-        $messageValues = array();
-
-        $messageValues[] = array(
-            'id' => $message->getId(),
-            'content' => $message->getContent(),
-            'added' => $message->getAdded(),
-        );
-        return $messageValues;
+        return $message = $this->find($id);
     }
 
     public function getFormByMessageId($id)
