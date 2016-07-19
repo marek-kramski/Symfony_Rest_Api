@@ -28,7 +28,6 @@ class MessageRepository extends EntityRepository
 
     public function getAllForms()
     {
-        $messages = $this->findAll();
         $contactInfos = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->findAll();
 
         $forms = array();
@@ -66,11 +65,11 @@ class MessageRepository extends EntityRepository
 
         $messageValues = array();
 
-        $messageValues['id'] = $message->getId();
-        $messageValues['content'] = $message->getContent();
-        $messageValues['added'] = $message->getAdded();
-
-
+        $messageValues[] = array(
+            'id' => $message->getId(),
+            'content' => $message->getContent(),
+            'added' => $message->getAdded(),
+        );
         return $messageValues;
     }
 
