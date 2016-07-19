@@ -1,0 +1,34 @@
+get_all_messages:
+    path:      /api/messages
+    defaults:  { _controller: ApiBundle:Rest:getAllMessages }
+    methods:   [GET, HEAD]
+
+get_all_forms:
+    path:      /api/forms
+    defaults:  { _controller: ApiBundle:Rest:getAllForms }
+    methods:   [GET, HEAD]
+
+get_message_by_id:
+    path:      /api/messages/{id}
+    defaults:  { _controller: ApiBundle:Rest:getMessageById }
+    methods:   [GET]
+
+get_form_by__message_id:
+    path:      /api/forms/{id}
+    defaults:  { _controller: ApiBundle:Rest:getFormByMessageId }
+    methods:   [GET]
+
+post_new_message:
+    path:      /api/messages
+    defaults:  { _controller: ApiBundle:Rest:postNewMessage }
+    methods:   [POST]
+
+update_message:
+    path:      /api/messages/{id}
+    defaults:  { _controller: ApiBundle:Rest:updateMessage }
+    methods:   [PUT]
+
+delete_message:
+    path:      /api/messages/{id}
+    defaults:  { _controller: ApiBundle:Rest:deleteMessage }
+    methods:   [DELETE]

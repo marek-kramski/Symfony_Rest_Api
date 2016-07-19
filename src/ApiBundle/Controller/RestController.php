@@ -11,11 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RestController extends Controller
 {
-    /**
-     * @Route("/api/messages", name="get_all_messages")
-     * @Method({"GET","HEAD"})
-     */
-    public function getAllMessages()
+
+    public function getAllMessagesAction()
     {
         $response = new JsonResponse();
         $messages = $this->getDoctrine()
@@ -26,12 +23,7 @@ class RestController extends Controller
         return $response;
     }
 
-
-    /**
-     * @Route("/api/forms", name="get_all_forms")
-     * @Method("GET")
-     */
-    public function getAllForms()
+    public function getAllFormsAction()
     {
         $response = new JsonResponse();
         $forms = $this->getDoctrine()
@@ -43,11 +35,7 @@ class RestController extends Controller
         return $response;
     }
 
-    /**
-     * @Route("/api/messages/{id}", name="get_message_by_id")
-     * @Method("GET")
-     */
-    public function getMessageById(Request $request, $id)
+    public function getMessageByIdAction(Request $request, $id)
     {
         $response = new JsonResponse();
         $uri = $request->getUri();
@@ -63,11 +51,7 @@ class RestController extends Controller
 
     }
 
-    /**
-     * @Route("/api/forms/{id}", name="get_form_by_id")
-     * @Method({"GET","HEAD"})
-     */
-    public function getFormByMessageId(Request $request, $id)
+    public function getFormByMessageIdAction(Request $request, $id)
     {
         $response = new JsonResponse();
         $uri = $request->getUri();
@@ -81,21 +65,15 @@ class RestController extends Controller
         return $response->setContent($formWithHal);
     }
 
-    /**
-     * @Route("/api/messages", name="post_new_message")
-     * @Method("POST")
-     */
-    public function postNewMessage(Request $request)
+
+    public function postNewMessageAction(Request $request)
     {
 
         return $this->processForm(new Message(), $request);
     }
 
-    /**
-     * @Route("/api/messages/{id}", name="update_message")
-     * @Method("PUT")
-     */
-    public function updateMessage(Message $message, Request $request)
+
+    public function updateMessageAction(Message $message, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -119,11 +97,8 @@ class RestController extends Controller
 
     }
 
-    /**
-     * @Route("/api/messages/{id}", name="delete_message")
-     * @Method("DELETE")
-     */
-    public function deleteMessage($id)
+
+    public function deleteMessageAction($id)
     {
         return $this->deleteForm($id);
     }
