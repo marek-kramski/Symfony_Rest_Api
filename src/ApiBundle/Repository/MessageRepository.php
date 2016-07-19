@@ -3,7 +3,6 @@
 namespace ApiBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 
 /**
  * MessageRepository
@@ -64,6 +63,8 @@ class MessageRepository extends EntityRepository
     public function getMessageById($id)
     {
         $message = $this->find($id);
+
+        $messageValues = array();
 
         $messageValues['id'] = $message->getId();
         $messageValues['content'] = $message->getContent();

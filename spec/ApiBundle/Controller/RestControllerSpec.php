@@ -61,16 +61,17 @@ class RestControllerSpec extends ObjectBehavior
         $this->getMessageById($request, 1)->shouldHaveType('Symfony\Component\HttpFoundation\JsonResponse');
     }
 
-    function it_should_create_an_object_when_form_is_valid($request, $form, $formFactory, $doctrine, EntityManager $entityManager)
+    function it_should_create_an_object_when_form_is_valid($request, $form, $formFactory, $doctrine, EntityManager $em)
     {
         $message = new Message();
+        $doctrine->getManager()->willReturn($em);
 
         $formFactory->create('ApiBundle\Form\MessageType', $message);
         $form->handleRequest($request)->willReturn($form);
         $form->isValid()->willReturn(true);
 
-        
-        $entityManager->persist($message)->shouldBeCalled();
-        $entityManager->flush()->shouldBeCalled();
+
+        $em->persist($message)->shouldBeCalled();
+        $em->flush()->shouldBeCalled();
     }
 }

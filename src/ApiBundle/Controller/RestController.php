@@ -148,6 +148,7 @@ class RestController extends Controller
             $this->redirectToRoute('get_form_by_id', array('id' => $message->getId()));
             return $message;
         }
+
         $statusCode = $em->contains($message) ? 201 : 204;
         $response->setStatusCode($statusCode);
 
