@@ -27,6 +27,40 @@ class MessageRepository extends EntityRepository
         return array('messages' => $messageValues);
     }
 
+    public function getAllForms()
+    {
+        $messages = $this->findAll();
+        $contactInfos = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->findAll();
+
+        $forms = array();
+
+        $messageValues = array();
+
+
+        foreach ($contactInfos as $contactInfo) {
+            $id = $contactInfo->getId();
+            $messages = $this->findBy(array('contactInfoId' => $id));
+
+            $contactInfoData = array(
+                'name' => $contactInfo->getName(),
+                'phone' => $contactInfo->getPhone(),
+                'email' => $contactInfo->getEmail(),
+            );
+
+            foreach ($messages as $message) {
+                $messageValues = array(
+                    'id' => $message->getId(),
+                    'content' => $message->getContent(),
+                    'added' => $message->getAdded(),
+                );
+            }
+
+            $forms[] = array('contact_info' => $contactInfoData, 'message' => $messageValues);
+        }
+
+        return array('forms' => $forms);
+    }
+
     public function getMessageById($id)
     {
         $message = $this->find($id);
@@ -36,39 +70,35 @@ class MessageRepository extends EntityRepository
         $messageValues['added'] = $message->getAdded();
 
 
-        return array('message' => $messageValues,);
+        return $messageValues;
     }
 
     public function getFormByMessageId($id)
     {
-        $message = $this->getById($id);
-        $messageObject = $this->find($id);
-        $email = $messageObject->getEmail();
-        $contactInfo = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->getInfoByEmail($email);
+        $message = array();
+        $contactInfo = array();
 
-        return array('message' => $message, 'Contact_info' => $contactInfo);
+        $messageObj = $this->find($id);
+        $message[] = array(
+            'content' => $messageObj->getContent(),
+            'added' => $messageObj->getAdded(),
+        );
+        $id = $messageObj->getId();
+        $contactInfoObj = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->find($id);
+        $contactInfo[] = array(
+            'name' => $contactInfoObj->getName(),
+            'phone' => $contactInfoObj->getPhone(),
+            'email' => $contactInfoObj->getEmail(),
+        );
 
-    }
+        return array('message' => $message, 'contact_info' => $contactInfo);
 
-    public function getById($id)
-    {
-        $em = $this->getEntityManager();
-
-        $query = $em->createQuery('
-        SELECT m
-        FROM ApiBundle:Message m
-        WHERE m.id = :id
-        ')->setParameter('id', $id);
-//        $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
-
-        return $query->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function exists($id)
     {
         return null !== $this->find($id);
     }
-    
 
 
 }

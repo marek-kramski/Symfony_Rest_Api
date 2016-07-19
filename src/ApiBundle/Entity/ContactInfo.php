@@ -15,12 +15,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ContactInfo
 {
     /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -31,7 +37,7 @@ class ContactInfo
     private $phone;
 
     /**
-     * @ORM\OneToMany(targetEntity="message", mappedBy="email", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="message", mappedBy="id", cascade={"persist"})
      */
     protected $messages;
 
@@ -41,6 +47,17 @@ class ContactInfo
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -118,11 +135,11 @@ class ContactInfo
     /**
      * Add message
      *
-     * @param \ApiBundle\Entity\Message $message
+     * @param \ApiBundle\Entity\message $message
      *
      * @return ContactInfo
      */
-    public function addMessage(Message $message)
+    public function addMessage(\ApiBundle\Entity\message $message)
     {
         $this->messages[] = $message;
 
@@ -134,7 +151,7 @@ class ContactInfo
      *
      * @param \ApiBundle\Entity\message $message
      */
-    public function removeMessage(Message $message)
+    public function removeMessage(\ApiBundle\Entity\message $message)
     {
         $this->messages->removeElement($message);
     }

@@ -25,11 +25,12 @@ class Message
      */
     private $content;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="ContactInfo", inversedBy="messages", cascade={"persist"})
-     * @ORM\JoinColumn(name="email", referencedColumnName="email")
+     * @ORM\JoinColumn(name="contactInfoId", referencedColumnName="id")
      */
-    protected $email;
+    protected $contactInfoId;
 
     /**
      * @ORM\Column(type="datetime")
@@ -47,6 +48,18 @@ class Message
     public function __construct()
     {
         $this->setAdded(new \DateTime());
+    }
+
+    public function getContactInfo()
+    {
+        return $this->contactInfoId;
+    }
+
+    public function setContactInfo(ContactInfo $email = null)
+    {
+        $this->contactInfoId = $email;
+
+        return $this;
     }
 
     /**
@@ -108,38 +121,26 @@ class Message
     }
 
     /**
-     * Set email
+     * Set contactInfoId
      *
-     * @param \ApiBundle\Entity\ContactInfo $email
+     * @param \ApiBundle\Entity\ContactInfo $contactInfoId
      *
      * @return Message
      */
-    public function setEmail(ContactInfo $email = null)
+    public function setContactInfoId(\ApiBundle\Entity\ContactInfo $contactInfoId = null)
     {
-        $this->email = $email;
+        $this->contactInfoId = $contactInfoId;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get contactInfoId
      *
      * @return \ApiBundle\Entity\ContactInfo
      */
-    public function getEmail()
+    public function getContactInfoId()
     {
-        return $this->email;
-    }
-
-    public function getContactInfo()
-    {
-        return $this->email;
-    }
-
-    public function setContactInfo(ContactInfo $email = null)
-    {
-        $this->email = $email;
-
-        return $this;
+        return $this->contactInfoId;
     }
 }

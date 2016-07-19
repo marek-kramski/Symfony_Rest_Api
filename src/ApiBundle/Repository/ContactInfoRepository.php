@@ -15,17 +15,5 @@ use Doctrine\ORM\Query;
  */
 class ContactInfoRepository extends EntityRepository
 {
-    public function getInfoByEmail($email)
-    {
-        $em = $this->getEntityManager();
 
-        $query = $em->createQuery('
-        SELECT c
-        FROM ApiBundle:ContactInfo c
-        WHERE c.email = :email
-        ')->setParameter('email', $email);
-        $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
-
-        return $query->getResult(Query::HYDRATE_ARRAY);
-    }
 }

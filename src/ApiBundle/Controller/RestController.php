@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RestController extends Controller
@@ -27,6 +26,23 @@ class RestController extends Controller
         return $response;
     }
 
+
+    /**
+     * @Route("/api/forms", name="get_all_forms")
+     * @Method("GET")
+     */
+    public function getAllForms()
+    {
+        $response = new JsonResponse();
+        $forms = $this->getDoctrine()
+            ->getRepository('ApiBundle:Message')
+            ->getAllForms();
+
+        $response->setContent(json_encode($forms));
+
+        return $response;
+    }
+
     /**
      * @Route("/api/messages/{id}", name="get_message_by_id")
      * @Method("GET")
@@ -38,9 +54,9 @@ class RestController extends Controller
         $message = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
             ->getMessageById($id);
-        $hal_links = $this->getHalValues($uri, $id);
+        $halLinks = $this->getHalValues($uri, $id);
 
-        $messageWithHal = array('_links' => $hal_links, 'message' => $message);
+        $messageWithHal = array('_links' => $halLinks, 'message' => $message);
 
         $response->setContent(json_encode($messageWithHal));
         return $response;
@@ -48,7 +64,7 @@ class RestController extends Controller
     }
 
     /**
-     * @Route("/api/form/{id}", name="get_form_by_id")
+     * @Route("/api/forms/{id}", name="get_form_by_id")
      * @Method({"GET","HEAD"})
      */
     public function getFormByMessageId(Request $request, $id)
@@ -59,8 +75,8 @@ class RestController extends Controller
             ->getRepository('ApiBundle:Message')
             ->getFormByMessageId($id);
 
-        $hal_links = $this->getHalValues($uri, $id);
-        $formWithHal = json_encode(array('_links' => $hal_links, 'form' => $form));
+        $halLinks = $this->getHalValues($uri, $id);
+        $formWithHal = json_encode(array('_links' => $halLinks, 'form' => $form));
 
         return $response->setContent($formWithHal);
     }
@@ -157,22 +173,23 @@ class RestController extends Controller
         return $response;
     }
 
-    public function getHalValues($uri, $id)
+    private function getHalValues($uri, $id)
     {
         $dirName = dirname($uri);
 
-        $hal_links = array(
+        $halLinks = array(
             'self' => array('href' => "$uri"),
         );
 
         if ($this->getDoctrine()
-            ->getRepository('ApiBundle:Message')->exists($id + 1)) {
-            $hal_links['next'] = array('href' => "$dirName/" . ($id + 1));
+            ->getRepository('ApiBundle:Message')->exists($id + 1)
+        ) {
+            $halLinks['next'] = array('href' => "$dirName/" . ($id + 1));
         }
         if (($id - 1) !== 0) {
-            $hal_links['prev'] = array('href' => "$dirName/" . ($id - 1));
+            $halLinks['prev'] = array('href' => "$dirName/" . ($id - 1));
         }
-        return $hal_links;
+        return $halLinks;
     }
 
 

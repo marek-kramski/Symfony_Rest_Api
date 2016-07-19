@@ -52,8 +52,10 @@ class RestControllerSpec extends ObjectBehavior
     function it_should_return_message_by_id_in_json($repository, $doctrine, $request)
     {
         $jsonResponse = new JsonResponse();
+        $id = 1;
         $doctrine->getRepository(Argument::exact('ApiBundle:Messages'))->willReturn($repository);
-        $repository->getMessageById(1)->willReturn('message');
+        $repository->getMessageById($id)->willReturn('message');
+        $repository->exists($id + 1)->willReturn(true);
 
 //        $this->getMessageById($request, 1)->shouldBeLike($jsonResponse->setContent(json_encode(array('_links', 'message'))));
         $this->getMessageById($request, 1)->shouldHaveType('Symfony\Component\HttpFoundation\JsonResponse');
