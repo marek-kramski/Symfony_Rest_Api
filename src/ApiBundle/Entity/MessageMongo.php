@@ -4,6 +4,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * @ODM\Document
  * @Hateoas\Relation("self", href= "expr('/api/messages/' ~ object.getId())")
  * @Hateoas\Relation(
  *     "next",
@@ -13,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  *     "prev",
  *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() - 1)"})
  * )
- * @Document
  */
 class Message
 {
@@ -48,7 +48,7 @@ class Message
 /**
  * ContactInfo
  *
- * @Document
+ * @ODM\Document
  */
 class ContactInfo
 {
