@@ -6,8 +6,9 @@ use ApiBundle\Entity\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\RestBundle\Controller\FOSRestController;
 
-class RestController extends Controller
+class RestController extends FOSRestController
 {
 
     public function getAllMessagesAction()
