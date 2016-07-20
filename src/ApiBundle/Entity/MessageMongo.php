@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Hateoas\Relation("self", href= "expr('/api/messages/' ~ object.getId())")
@@ -29,8 +30,7 @@ class Message
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="ContactInfo", inversedBy="messages", cascade={"persist"})
-     * @ORM\JoinColumn(name="contactInfoId", referencedColumnName="id")
+     * @ODM\ReferenceOne(targetDocument="ContactInfo", inversedBy="messages")
      */
     protected $contactInfoId;
 
@@ -38,14 +38,6 @@ class Message
      * @ODM\Field(type="timestamp")
      */
     private $added;
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function doStuffOnPrePersist()
-    {
-        $this->added = date_create(date('Y-m-d H:i:s'));
-    }
 
     public function __construct()
     {
@@ -56,36 +48,33 @@ class Message
 /**
  * ContactInfo
  *
- * @ORM\Entity(repositoryClass="ApiBundle\Repository\ContactInfoRepository")
- * @ORM\Table(name="contact_info")
- * @ORM\HasLifecycleCallbacks
+ * @Document
  */
 class ContactInfo
 {
     /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ODM\Id
+     * @ODM\Field(strategy="AUTO",type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ODM\Field(type="string")
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ODM\Field(type="string")
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ODM\Field(type="string")
      */
     private $phone;
 
     /**
-     * @ORM\OneToMany(targetEntity="message", mappedBy="contactInfoId", cascade={"persist"})
+     * @ReferenceMany(targetDocument="Message", mappedBy="contactInfoId")
      */
     protected $messages;
 
