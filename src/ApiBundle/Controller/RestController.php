@@ -44,16 +44,9 @@ class RestController extends Controller
         $serializer = $this->get('jms_serializer');
 
         $response = new JsonResponse();
-        $uri = $request->getUri();
         $message = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
             ->getMessageById($id);
-        $halLinks = $this->getHalValues($uri, $id);
-
-
-//        $messageWithHal = array('_links' => $halLinks, 'message' => $serializer->serialize($message, 'json'));
-
-//        $messageSerialized['_links'] = $halLinks;
 
         $response->setContent($serializer->serialize($message, 'json'));
         return $response;
@@ -62,16 +55,17 @@ class RestController extends Controller
 
     public function getFormByMessageIdAction(Request $request, $id)
     {
+        $serializer = $this->get('jms_serializer');
+
         $response = new JsonResponse();
-        $uri = $request->getUri();
         $form = $this->getDoctrine()
             ->getRepository('ApiBundle:Message')
             ->getFormByMessageId($id);
 
-        $halLinks = $this->getHalValues($uri, $id);
-        $formWithHal = json_encode(array('_links' => $halLinks, 'form' => $form));
+        $response->setContent($serializer->serialize($form, 'json'));
 
-        return $response->setContent($formWithHal);
+
+        return $response;
     }
 
 

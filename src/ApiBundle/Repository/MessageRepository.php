@@ -39,24 +39,12 @@ class MessageRepository extends EntityRepository
 
     public function getFormByMessageId($id)
     {
-        $message = array();
-        $contactInfo = array();
 
         $messageObj = $this->find($id);
-        $message[] = array(
-            'content' => $messageObj->getContent(),
-            'added' => $messageObj->getAdded(),
-        );
         $id = $messageObj->getId();
         $contactInfoObj = $this->getEntityManager()->getRepository('ApiBundle:ContactInfo')->find($id);
-        $contactInfo[] = array(
-            'name' => $contactInfoObj->getName(),
-            'phone' => $contactInfoObj->getPhone(),
-            'email' => $contactInfoObj->getEmail(),
-        );
 
-        return array('message' => $message, 'contact_info' => $contactInfo);
-
+        return $contactInfoObj;
     }
 
     public function exists($id)

@@ -11,10 +11,15 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\MessageRepository")
  * @ORM\Table(name="message")
+ * @Hateoas\Relation("self", href= "expr('/api/messages/' ~ object.getId())")
  * @Hateoas\Relation(
- *     "self"
- *     href=@Hateoas\Route(
- *
+ *     "next",
+ *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() + 1)"})
+ * )
+ * @Hateoas\Relation(
+ *     "prev",
+ *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() - 1)"})
+ * )
  */
 class Message
 {
