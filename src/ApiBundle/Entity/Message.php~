@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Message
@@ -24,11 +25,12 @@ class Message
      */
     private $content;
 
+
     /**
-     * @ORM\ManyToOne(targetEntity="contactinfo", inversedBy="messages", cascade={"persist"})
-     * @ORM\JoinColumn(name="email", referencedColumnName="email")
+     * @ORM\ManyToOne(targetEntity="ContactInfo", inversedBy="messages", cascade={"persist"})
+     * @ORM\JoinColumn(name="contactInfoId", referencedColumnName="id")
      */
-    protected $email;
+    protected $contactInfoId;
 
     /**
      * @ORM\Column(type="datetime")
@@ -41,5 +43,22 @@ class Message
     public function doStuffOnPrePersist()
     {
         $this->added = date_create(date('Y-m-d H:i:s'));
+    }
+
+    public function __construct()
+    {
+        $this->setAdded(new \DateTime());
+    }
+
+    public function getContactInfo()
+    {
+        return $this->contactInfoId;
+    }
+
+    public function setContactInfo(ContactInfo $email = null)
+    {
+        $this->contactInfoId = $email;
+
+        return $this;
     }
 }

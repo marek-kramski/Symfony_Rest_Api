@@ -1,76 +1,57 @@
 <?php
 
-namespace ApiBundle\Entity;
+namespace ApiBundle\Document;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Hateoas\Configuration\Annotation as Hateoas;
 
-
 /**
- * Message
- *
- * @ORM\Entity(repositoryClass="ApiBundle\Repository\MessageRepository")
- * @ORM\Table(name="message")
- * @Hateoas\Relation("self", href= "expr('/api/messages/' ~ object.getId())")
+ * @ODM\Document(repositoryClass="ApiBundle\DocumentRepository\MessageRepository")
+ * @Hateoas\Relation(
+ *     "self",
+ *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId())"})
+ * )
  * @Hateoas\Relation(
  *     "next",
- *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() + 1)"})
+ *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() + 1)"}),
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.nextExists() !== null)")
  * )
  * @Hateoas\Relation(
  *     "prev",
- *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() - 1)"})
+ *     href= @Hateoas\Route("get_message_by_id", parameters = {"id" = "expr(object.getId() - 1)"}),
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr((object.getId() - 1) < 1)")
  * )
+ *
  */
 class Message
 {
     /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ODM\Id(strategy="INCREMENT")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="text", length=5000)
+     * @ODM\Field(type="string")
      */
     private $content;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="ContactInfo", inversedBy="messages", cascade={"persist"})
-     * @ORM\JoinColumn(name="contactInfoId", referencedColumnName="id")
+     * @ODM\ReferenceOne(targetDocument="ContactInfo", inversedBy="messages")
      */
     protected $contactInfoId;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ODM\Field(type="date")
      */
-    private $added;
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function doStuffOnPrePersist()
-    {
-        $this->added = date_create(date('Y-m-d H:i:s'));
-    }
+    protected $added;
 
     public function __construct()
     {
-        $this->setAdded(new \DateTime());
+//        $this->setAdded(new \DateTime());
     }
 
-    public function getContactInfo()
-    {
-        return $this->contactInfoId;
-    }
-
-    public function setContactInfo(ContactInfo $email = null)
-    {
-        $this->contactInfoId = $email;
-
-        return $this;
-    }
 
     /**
      * Get id
@@ -133,7 +114,7 @@ class Message
     /**
      * Set contactInfoId
      *
-     * @param \ApiBundle\Entity\ContactInfo $contactInfoId
+     * @param \ApiBundle\Document\ContactInfo $contactInfoId
      *
      * @return Message
      */
@@ -147,10 +128,16 @@ class Message
     /**
      * Get contactInfoId
      *
-     * @return \ApiBundle\Entity\ContactInfo
+     * @return \ApiBundle\Document\ContactInfo
      */
     public function getContactInfoId()
     {
         return $this->contactInfoId;
     }
+
+    public function nextExists()
+    {
+    }
+
+
 }

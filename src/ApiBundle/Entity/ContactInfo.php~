@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * ContactInfo
@@ -14,12 +15,18 @@ use Doctrine\ORM\Mapping as ORM;
 class ContactInfo
 {
     /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -30,7 +37,7 @@ class ContactInfo
     private $phone;
 
     /**
-     * @ORM\OneToMany(targetEntity="message", mappedBy="email", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="message", mappedBy="id", cascade={"persist"})
      */
     protected $messages;
 
@@ -41,4 +48,5 @@ class ContactInfo
     {
         $this->messages = new ArrayCollection();
     }
+
 }

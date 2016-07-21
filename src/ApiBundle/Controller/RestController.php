@@ -16,9 +16,12 @@ class RestController extends FOSRestController
         $serializer = $this->get('jms_serializer');
         $response = new JsonResponse();
 
-        $messages = $this->getDoctrine()
+//        $messages = $this->getDoctrine()
+//            ->getRepository('ApiBundle:Message')
+//            ->getAllMessages();
+        $messages = $this->get('doctrine_mongodb')
             ->getRepository('ApiBundle:Message')
-            ->getAllMessages();
+            ->findAll();
 
         $messagesSerialized = $serializer->serialize($messages, 'json');
 
@@ -31,9 +34,12 @@ class RestController extends FOSRestController
         $serializer = $this->get('jms_serializer');
 
         $response = new JsonResponse();
-        $forms = $this->getDoctrine()
-                      ->getRepository('ApiBundle:Message')
-                      ->getAllForms();
+//        $forms = $this->getDoctrine()
+//                      ->getRepository('ApiBundle:Message')
+//                      ->getAllForms();
+        $forms = $this->get('doctrine_mongodb')
+            ->getRepository('ApiBundle:Message')
+            ->getAllForms();
 
         $response->setContent($serializer->serialize($forms, 'json'));
 
@@ -91,7 +97,7 @@ class RestController extends FOSRestController
             $em->persist($message);
             $em->flush();
 
-            $this->redirectToRoute('get_form_by_id', array('id' => $message->getId()));
+            $this->redirectToRoute('get_form_by__message_id', array('id' => $message->getId()));
             return $message;
         }
         $statusCode = $em->contains($message) ? 201 : 204;
@@ -124,7 +130,7 @@ class RestController extends FOSRestController
             $em->persist($message);
             $em->flush();
 
-            $this->redirectToRoute('get_form_by_id', array('id' => $message->getId()));
+            $this->redirectToRoute('get_form_by__message_id', array('id' => $message->getId()));
             return $message;
         }
 
@@ -153,24 +159,24 @@ class RestController extends FOSRestController
         return $response;
     }
 
-    private function getHalValues($uri, $id)
-    {
-        $dirName = dirname($uri);
-
-        $halLinks = array(
-            'self' => array('href' => "$uri"),
-        );
-
-        if ($this->getDoctrine()
-            ->getRepository('ApiBundle:Message')->exists($id + 1)
-        ) {
-            $halLinks['next'] = array('href' => "$dirName/" . ($id + 1));
-        }
-        if (($id - 1) !== 0) {
-            $halLinks['prev'] = array('href' => "$dirName/" . ($id - 1));
-        }
-        return $halLinks;
-    }
+//    private function getHalValues($uri, $id)
+//    {
+//        $dirName = dirname($uri);
+//
+//        $halLinks = array(
+//            'self' => array('href' => "$uri"),
+//        );
+//
+//        if ($this->getDoctrine()
+//            ->getRepository('ApiBundle:Message')->exists($id + 1)
+//        ) {
+//            $halLinks['next'] = array('href' => "$dirName/" . ($id + 1));
+//        }
+//        if (($id - 1) !== 0) {
+//            $halLinks['prev'] = array('href' => "$dirName/" . ($id - 1));
+//        }
+//        return $halLinks;
+//    }
 
 
 }

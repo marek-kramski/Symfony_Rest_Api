@@ -49,7 +49,8 @@
     "guzzlehttp/guzzle": "^6.2",
     "behat/mink-extension": "^2.2",
     "behat/web-api-extension": "~1.0@dev",
-    "behatch/contexts": "^2.5"
+    "behatch/contexts": "^2.5",
+    "doctrine/doctrine-fixtures-bundle": "^2.3"
   },
   "minimum-stability": "dev",
   "scripts": {

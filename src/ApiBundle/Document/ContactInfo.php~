@@ -1,0 +1,44 @@
+<?php
+
+namespace ApiBundle\Document;
+
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Hateoas\Configuration\Annotation as Hateoas;
+
+/**
+ * @ODM\Document
+ */
+class ContactInfo
+{
+    /**
+     * @ODM\Id
+     */
+    private $id;
+
+    /**
+     * @ODM\Field(type="string")
+     */
+    private $name;
+
+    /**
+     * @ODM\Field(type="string")
+     */
+    private $email;
+
+    /**
+     * @ODM\Field(type="string")
+     */
+    private $phone;
+
+    /**
+     * @ODM\ReferenceMany(targetDocument="Message", mappedBy="contactInfoId")
+     */
+    protected $messages;
+
+    public function __construct()
+    {
+        $this->id = new ArrayCollection();
+    }
+
+}
